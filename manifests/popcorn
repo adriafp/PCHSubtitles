@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+	ServerName popcorn.local
+	DocumentRoot /vagrant/src
+
+	<Directory /vagrant/src>
+		DirectoryIndex index.php
+		AllowOverride All
+		Order allow,deny
+		Allow from all
+	</Directory>
+</VirtualHost>
