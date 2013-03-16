@@ -1,5 +1,7 @@
 <?php
-$initial_dir = "/opt/sybhttpd/localhost.drives/HARD_DISK/Download/";
+
+include_once "config.php";
+
 $dir_param = $_GET['dir'];
 $file_param = $_GET['file'];
 $fileName = $initial_dir.$dir_param.$file_param;

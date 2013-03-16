@@ -1,7 +1,10 @@
-<?php include 'header.php';?>
+<?php
+	include_once "config.php";
+	include 'header.php';
+?>
 
 <?php
-$initial_dir = "/opt/sybhttpd/localhost.drives/HARD_DISK/Download/";
+
 $dir_param = $_GET['dir'];
 $file_param = $_GET['file'];
 $fileName = $initial_dir.$dir_param.$file_param;
@@ -9,15 +12,26 @@ $fileName = $initial_dir.$dir_param.$file_param;
 $matches = array();
 preg_match('/S[0-9][0-9]E[0-9][0-9]/',strtoupper($file_param),$matches);
 
-if(isset($matches[0])) {
+$showSearch = true;
+
+if(!empty($_GET['q'])) {
+//	echo 'Searching for:' . $_GET['q'] .'<br>';
+	$out = search(strtolower($_GET['q']), $dir_param, $file_param);
+	if(!empty($out)) {
+		$showSearch = false;
+		echo $out;
+	}
+} elseif(isset($matches[0])) {
 	$episode = $matches[0];
 	$tvShow = trim(str_replace('.',' ', substr($file_param,0,strpos($file_param,$episode))));
-	search(strtolower(str_replace(' ','+',$tvShow.'+'.$episode)), $dir_param, $file_param);
+	$out = search(strtolower(str_replace(' ','+',$tvShow.'+'.$episode)), $dir_param, $file_param);
+	if(!empty($out)) {
+		$showSearch = false;
+		echo $out;
+	}
+}
 
-} else if(!empty($_GET['q'])){
-	search($_GET['q'], $dir_param, $file_param);
-} else {
-	//Is not a tv show file
+if ($showSearch) {
 	?>
 	<form action="subtitles.php">
 		<label for="q">Search a subtitle for file: <strong><?php echo $file_param?></strong></label>
@@ -30,27 +44,32 @@ if(isset($matches[0])) {
 }
 
 function search($text, $dir_param, $file_param) {
+	$result = null;
 	$feed_url = 'http://www.subdivx.com/feed.php?buscar='.$text;
 	try {
 		$rss = simplexml_load_file($feed_url);
 		if($rss)
 		{
-			echo '<ul data-role="listview" data-theme="b">';
+			$result = '<ul data-role="listview" data-inset="true" data-theme="c">
+			<li data-role="list-divider" data-theme="e">'.$file_param.'</li>';
 			$items = $rss->channel->item;
+			if(count($items)<=0) {
+				return null;
+			}
 			foreach($items as $item)
 			{
 				$title = $item->title;
 				$link = $item->link;
-				$published_on = $item->pubDate;
 				$description = $item->description;
-				echo '<li><a href="download.php?dir='.$dir_param.'&file='.$file_param.'&l='.$link.'"><h2>'.$title.'</h2><p>'.$description.'</p></a>';
-				echo '</li>';
+				$result .= '<li data-icon="arrow-d"><a href="download.php?dir='.$dir_param.'&file='.$file_param.'&l='.$link.'"><h2>'.$title.'</h2><p>'.$description.'</p></a>';
+				$result .= '</li>';
 			}
-			echo '</ul>';
+			$result .='</ul>';
 		}
 	} catch(Exception $e) {
 		var_dump($e);
 	}
+	return $result;
 }
 
 ?>
