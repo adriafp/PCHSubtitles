@@ -17,7 +17,14 @@
 <body>
 <div data-role="page">
     <div data-role="header">
-        <a href="#" data-rel="back" data-icon="arrow-l">Back</a>
+		<?php if(!empty($_REQUEST['dir'])){
+			if(lastIndexOf($_REQUEST['dir'],'/')>-1) {
+				$backLink = substr($_REQUEST['dir'], 0, lastIndexOf($_REQUEST['dir'],'/'));
+			} else {
+				$backLink = "";
+			}
+			echo "<a href='/?dir=$backLink' data-icon='arrow-l'>Back</a>";
+		}?>
         <h1>PCH Subtitles Manager</h1>
         <a href="/" data-icon="home">Home</a>
         <!--        <a href="#mypanel" data-icon="bars">Menu</a>-->

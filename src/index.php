@@ -6,11 +6,10 @@
 <ul data-role="listview" data-inset="true" data-autodividers="true" data-divider-theme="e">
 <?php
 
-	$param_dir = '';
-	if(isset($_GET['dir'])) {
-		$param_dir = $_GET['dir'].'/';
-	}
-	$dir = $initial_dir . $param_dir;
+	$param_dir = $_REQUEST['dir'];
+
+	$dir = empty($param_dir)? $initial_dir : $initial_dir . $param_dir.'/';
+
 	$count = 0;
 	if (is_dir($dir)) {
 		$files = scandir($dir);
@@ -19,7 +18,7 @@
 		$files_arr = array();
 
 		foreach($files as $file) {
-			if(in_array($file,$excluded_filename) || strpos($file,'.')==0){
+			if(in_array($file,$excluded_filename) || startsWith($file,'.')) {
 				continue;
 			}
 			if(filetype($dir . $file)=='dir') {
@@ -30,7 +29,7 @@
 		}
 		foreach($dir_arr as $d){
 			?>
-			<li class="dir" data-theme="c"><a href="?dir=<?php echo $param_dir.$d ?>" data-transition="none"><?php echo $d ?></a></li>
+			<li class="dir" data-theme="c"><a href="?dir=<?php echo $param_dir.'/'.$d ?>" data-transition="none"><?php echo $d ?></a></li>
 			<?php
 		}
 		?>

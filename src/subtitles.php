@@ -15,7 +15,6 @@ preg_match('/S[0-9][0-9]E[0-9][0-9]/',strtoupper($file_param),$matches);
 $showSearch = true;
 
 if(!empty($_GET['q'])) {
-//	echo 'Searching for:' . $_GET['q'] .'<br>';
 	$out = search(strtolower($_GET['q']), $dir_param, $file_param);
 	if(!empty($out)) {
 		$showSearch = false;
