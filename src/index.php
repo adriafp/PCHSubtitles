@@ -29,7 +29,7 @@
 		}
 		foreach($dir_arr as $d){
 			?>
-			<li class="dir" data-theme="c"><a href="?dir=<?php echo $param_dir.'/'.$d ?>" data-transition="none"><?php echo $d ?></a></li>
+			<li class="dir" data-theme="c"><a href="?dir=<?php echo empty($param_dir)?$d:$param_dir.'/'.$d ?>" data-transition="none"><?php echo $d ?></a></li>
 			<?php
 		}
 		?>
