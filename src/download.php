@@ -11,7 +11,7 @@ if(!empty($extract)) {
 	$ext = pathinfo($extract, PATHINFO_EXTENSION);
 
 	if($ext=='rar') {
-		execute('/opt/sybhttpd/localhost.drives/HARD_DISK/unrar.sh '.getcwd().'/'.$extract);
+		execute('unrar e '.getcwd().'/'.$extract);
 	} else if($ext=='zip') {
 		execute('unzip '.getcwd().'/'.$extract);
 	}
@@ -36,7 +36,7 @@ if(!empty($extract)) {
 		$tmp = file_put_contents('file.'.$ext, $data);
 
 		if($ext=='rar') {
-			execute('/opt/sybhttpd/localhost.drives/HARD_DISK/unrar.sh '.getcwd().'/file.rar');
+			execute('unrar e '.getcwd().'/file.rar');
 		} else if($ext=='zip') {
 			execute('unzip '.getcwd().'/file.zip');
 		}
@@ -45,10 +45,12 @@ if(!empty($extract)) {
 }
 
 function processExtract($initial_dir, $dir_param, $file_param) {
+    global $script_dir;
+
 	execute('rm -rf file.rar');
 	execute('rm -rf file.zip');
 
-	$files = scandir('/opt/sybhttpd/localhost.drives/HARD_DISK/Apps/Webserver/website');
+	$files = scandir($script_dir);
 	var_dump($files);
 	$compressedFiles = array();
 	foreach($files as $file) {

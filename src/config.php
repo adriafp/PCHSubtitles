@@ -2,7 +2,8 @@
 
 //CONFIG
 
-$initial_dir = "/opt/sybhttpd/localhost.drives/HARD_DISK/";
+$initial_dir = "/home/pi/";
+$script_dir = "/var/www";
 
 $excluded_filename = array(
 	'.',
